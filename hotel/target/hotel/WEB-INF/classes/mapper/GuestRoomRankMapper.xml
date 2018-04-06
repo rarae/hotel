@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.hotel.mapper.GuestRoomRankMapper">
+    <select id="listAllGuestRoomRank" resultType="GuestRoomRank">
+        select * from GuestRoomRank
+    </select>
+
+    <select id="listPagedGuestRoomRankt"   resultType="GuestRoomRank">
+        select top ${pageSize} * from GuestRoomRank where ID not in (select top (${pageSize} * (${pageIndex} -1)) ID from Guest)
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from GuestRoomRank
+    </select>
+
+    <insert id="insertGuestRoomRank" parameterType="GuestRoomRank">
+        insert into GuestRoomRank VALUES (#{rank},#{numOfPeople},#{price},#{facility})
+    </insert>
+
+    <update id="updateGuestRoomRank" parameterType="GuestRoomRank">
+        UPDATE  GuestRoomRank set numOfPeople=#{numOfPeople}, price=#{price}, facility=#{facility} where rank=#{rank}
+    </update>
+
+    <delete id="deleteGuestRoomRank" parameterType="GuestRoomRank">
+        DELETE FROM GuestRoomRank where rank=#{rank}
+    </delete>
+
+    <select id="getGuestRoomRankByRank" resultType="GuestRoomRank" parameterType="GuestRoomRank">
+        select * from GuestRoomRank where rank=#{rank}
+    </select>
+
+    <select id="queryGuestRoomRank" resultType="GuestRoomRank" parameterType="String">
+        select * from GuestRoomRank where
+        rank like #{rank} or numOfPeople like #{numOfPeople}
+        or price like #{price} or facility like #{facility}
+    </select>
+
+</mapper>

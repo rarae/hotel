@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.hotel.mapper.CheckOutMapper">
+
+    <select id="getNo" resultType="String">
+        select TOP 1 CheckOut.no from CheckOut order by no desc
+    </select>
+
+    <insert id="insertCheckOut" parameterType="CheckOut">
+        insert into CheckOut VALUES (#{no},#{registrationNo},#{amount},#{refund},#{adminID},#{confirmTime},#{note})
+    </insert>
+
+
+    <select id="getCheckOutByregistrationNo" resultType="CheckOut" parameterType="String">
+        select  * from CheckOut where registrationNo=#{registrationNo}
+    </select>
+
+
+</mapper>

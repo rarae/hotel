@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <meta charset="UTF-8">
+    <title>子页测试</title>
+    <script src="./js/jquery-2.2.4.min.js"></script>
+    <script src="./js/win10.child.js"></script>
+    <script src="./layui/layui.js"></script>
+    <script type="text/javascript" src="./js/win10.js"></script>
+    <style>
+        .btn{
+            margin: 10px;
+            margin-top: 30px;
+            width: 160px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            color: white;
+            background-color: #5FB878;
+            border-radius: 3px;
+            transition: all 0.5s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn:hover{
+            background-color: #256d95;
+        }
+        .no{font-size:30px;}
+        #info{
+            margin-left: 12px
+        }
+        .layui-icon{
+            font-size: 20px;
+            color: #1E9FFF;
+        }
+        .numOfPeople{
+            margin-left: 3px;
+            color:#1E9FFF
+        }
+        .price{
+            margin-left: 3px;
+            color:#FFB800
+        }
+    </style>
+    <script>
+        function f1() {
+            Win10_child.newMsg('子页的问候','这是从iframe页调用APi发送的消息哦');
+        }
+        function f2() {
+            Win10_child.openUrl('http://win10ui.yuri2.cn','<img class=\'icon\' src=\'./img/icon/win10.png\'/>Win10-UI官网')
+        }
+        function f3() {
+            Win10_child.close();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="layui-container" style="margin-top: 10px">
+        <div class="layui-row layui-col-space1">
+            <button id="btn_notInUse" class="layui-btn " style="background-color:#5FB878;">空闲</button>
+            <button id="btn_inUse" class="layui-btn " style="background-color:#FF5722;">已入住</button>
+            <button id="btn_booked" class="layui-btn " style="background-color:#1E9FFF;">已预订</button>
+            <button id="btn_all" class="layui-btn layui-btn-primary" >全部</button>
+        </div>
+
+        <div class="layui-row layui-col-space1">
+            <div id="view"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $("#btn_notInUse").click(function () {
+        $("#btn_all").click()
+        $("[name='inUse']").hide()
+        $("[name='booked']").hide()
+    })
+    $("#btn_inUse").click(function () {
+        $("#btn_all").click()
+        $("[name='notInUse']").hide()
+        $("[name='booked']").hide()
+    })
+    $("#btn_booked").click(function () {
+        $("#btn_all").click()
+        $("[name='inUse']").hide()
+        $("[name='notInUse']").hide()
+    })
+    $("#btn_all").click(function () {
+        $("[name='inUse']").show()
+        $("[name='notInUse']").show()
+        $("[name='booked']").show()
+    })
+</script>
+
+<script>
+    function roomRegister(no) {
+
+        layui.use(['layer', 'table','form','laydate', 'laytpl'], function() {
+            var table = layui.table;
+            var layer = layui.layer;
+            var form = layui.form;
+            var laydate = layui.laydate;
+
+            $.ajax({
+                type: "GET",
+                url: "/getGuestRoomByNo.do",
+                data: {"no":no},
+                success: function (roomData) {
+
+                    if(roomData.list[0].status=="notInUse") {
+                        var notInUse=layer.open({
+                            title: "操作",
+                            type: 1,
+                            area: ['620px', '300px'], //宽高
+                            content:
+                            '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">操作</label>\n' +
+                            '                <div class="layui-input-block">\n' +
+                            '      <select id="opr" name="opr" lay-verify="required" lay-filter="notInUse">\n' +
+                            '        <option value="-1">请选择操作</option>\n' +
+                            '        <option value="detail">详情</option>\n' +
+                            '        <option value="0">入住</option>\n' +
+                            '        <option value="book">预订</option>\n' +
+                            '      </select>'+
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '</form>',
+                            cancel: function(){
+                                layer.close(notInUse)
+                            }
+                        });
+                        form.render()
+                        form.on('select(notInUse)', function(data){
+                            if(data.value==="0"){
+                                layer.close(notInUse)
+                                var CheckIn=layer.open({
+                                    title: "入住",
+                                    type: 1,
+                                    area: ['620px', '540px'], //宽高
+                                    content:
+                                    '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <label class="layui-form-label">房号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                <input  id="no" name="no" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" disabled="true" style="cursor: not-allowed">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <label class="layui-form-label">客户1证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest1" required lay-verify="required|identity" placeholder="请输入客户1证件号(必填)" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item" id="guest2">\n' +
+                                    '                <label class="layui-form-label">客户2证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest2"   placeholder="请输入客户2证件号（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item" id="guest3">\n' +
+                                    '                <label class="layui-form-label">客户3证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest3"   placeholder="请输入客户3证件号（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item" id="guest4">\n' +
+                                    '                <label class="layui-form-label">客户4证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest4"   placeholder="请输入客户4证件号（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item" id="guest5">\n' +
+                                    '                <label class="layui-form-label">客户5证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest5"   placeholder="请输入客户5证件号（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '<div class="layui-form-item" >\n' +
+                                    '   <label class="layui-form-label">选择时间</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" placeholder="yyyy-MM-dd HH:mm:ss" type="text" class="layui-input" id="test1" >\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '<div class="layui-form-item">\n' +
+                                    '   <label class="layui-form-label">开始</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" name="startTime" id="startTime"  placeholder="" type="text" class="layui-input layui-disabled" disabled="true" >\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '<div class="layui-form-item">\n' +
+                                    '   <label class="layui-form-label">结束</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" name="endTime" id="endTime" placeholder="" type="text" class="layui-input layui-disabled" disabled="true">\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '            <div class="layui-form-item" id="note">\n' +
+                                    '                <label class="layui-form-label">备注</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="note"   placeholder="请输入备注（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <button class="layui-btn" lay-submit lay-filter="CheckIn">立即提交</button>\n' +
+                                    '                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '        </form>',
+                                    cancel: function(){
+                                        layer.close(CheckIn)
+                                        reload()
+                                    }
+                                });
+
+                                $("[name='no']").val(roomData.list[0].no.trim());
+                                if(roomData.list[0].numOfPeople==4){
+                                    $("#guest5").hide()
+                                }
+                                if(roomData.list[0].numOfPeople==3){
+                                    $("#guest5").hide()
+                                    $("#guest4").hide()
+                                }
+                                if(roomData.list[0].numOfPeople==2){
+                                    $("#guest5").hide()
+                                    $("#guest4").hide()
+                                    $("#guest3").hide()
+                                }
+                                if(roomData.list[0].numOfPeople==1){
+                                    $("#guest5").hide()
+                                    $("#guest4").hide()
+                                    $("#guest3").hide()
+                                    $("#guest2").hide()
+                                }
+
+                                //执行一个laydate实例
+                                laydate.render({
+                                    elem: '#test1' //指定元素
+                                    , range: true //或 range: '~' 来自定义分割字符
+                                    , type: 'datetime'
+                                    , calendar: true
+                                    , done: function (value, date, endDate) {
+                                        startTime = value.split(" - ")[0]
+                                        endTime = value.split(" - ")[1]
+                                        document.getElementById('startTime').value = value.split(" - ")[0]
+                                        document.getElementById('endTime').value = value.split(" - ")[1]
+                                    }
+                                });
+                                form.render()
+
+                                //监听提交
+                                form.on('submit(CheckIn)', function(data){
+                                    console.log(data.field)
+                                    var load
+                                    $.ajax({
+                                        url: "/insertCheckIn.do",
+                                        data: data.field,
+                                        type: "POST",
+                                        dataType: "text",
+                                        beforeSend: function () {
+                                            load = layer.load(1);
+                                        },
+                                        success: function (result) {
+                                            layer.close(CheckIn)
+                                            layer.close(load)
+                                            if(result=="no such guest"){
+                                                layer.msg('找不到客户，请重试',{time:2000});
+                                                return false;
+                                            }
+                                            if(result=="fail"){
+                                                layer.msg('提交失败，请重试',{time:2000});
+                                                return false;
+                                            }
+                                            layer.msg('提交成功',{time:2000});
+                                            reload()
+                                        }
+                                    })
+                                    return false;
+                                });
+
+                            }
+                            if(data.value=="detail"){
+                                layer.close(notInUse)
+                                localStorage.setItem('roomNo',no);
+                                Win10.openUrl('./guest_room_info.html','客房'+no+'信息')
+                            }
+
+                            if(data.value==="book"){
+                                layer.close(notInUse)
+                                var book=layer.open({
+                                    title: "预订",
+                                    type: 1,
+                                    area: ['620px', '470px'], //宽高
+                                    content:
+                                    '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <label class="layui-form-label">房号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                <input  id="no" name="no" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input" disabled="true" style="cursor: not-allowed">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <label class="layui-form-label">客户证件号</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="guest1" required lay-verify="required|identity" placeholder="请输入客户证件号" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '<div class="layui-form-item" >\n' +
+                                    '   <label class="layui-form-label">选择时间</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" placeholder="yyyy-MM-dd HH:mm:ss" type="text" class="layui-input" id="booktest1" >\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '<div class="layui-form-item">\n' +
+                                    '   <label class="layui-form-label">开始</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" name="startTime" id="startTime"  placeholder="" type="text" class="layui-input layui-disabled" disabled="true" >\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '<div class="layui-form-item">\n' +
+                                    '   <label class="layui-form-label">结束</label>\n' +
+                                    '   <div class="layui-input-block">\n' +
+                                    '       <input lay-verify="required" name="endTime" id="endTime" placeholder="" type="text" class="layui-input layui-disabled" disabled="true">\n' +
+                                    '   </div>\n' +
+                                    '</div>' +
+                                    '            <div class="layui-form-item" id="note">\n' +
+                                    '                <label class="layui-form-label">备注</label>\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <input  name="note"   placeholder="请输入备注（选填）" autocomplete="off" class="layui-input">\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '            <div class="layui-form-item">\n' +
+                                    '                <div class="layui-input-block">\n' +
+                                    '                    <button class="layui-btn" lay-submit lay-filter="book">立即提交</button>\n' +
+                                    '                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>\n' +
+                                    '                </div>\n' +
+                                    '            </div>\n' +
+                                    '        </form>',
+                                    cancel: function(){
+                                        layer.close(book)
+                                        reload()
+                                    }
+                                });
+
+                                $("[name='no']").val(roomData.list[0].no.trim());
+
+                                //执行一个laydate实例
+                                laydate.render({
+                                    elem: '#booktest1' //指定元素
+                                    , range: true //或 range: '~' 来自定义分割字符
+                                    , type: 'datetime'
+                                    , calendar: true
+                                    , done: function (value, date, endDate) {
+                                        startTime = value.split(" - ")[0]
+                                        endTime = value.split(" - ")[1]
+                                        document.getElementById('startTime').value = value.split(" - ")[0]
+                                        document.getElementById('endTime').value = value.split(" - ")[1]
+                                    }
+                                });
+                                form.render()
+
+                                //监听提交
+                                form.on('submit(book)', function(data){
+                                    console.log(data.field)
+                                    var load
+                                    $.ajax({
+                                        url: "/insertAdvanceOrder.do",
+                                        data: data.field,
+                                        type: "POST",
+                                        beforeSend: function () {
+                                            load = layer.load(1);
+                                        },
+                                        success: function (result) {
+                                            layer.close(load)
+                                            if(result=="no such guest"){
+                                                layer.msg('找不到客户，请重试',{time:2000});
+                                                return false;
+                                            }
+                                            if(result=="fail"){
+                                                layer.msg('提交失败，请重试',{time:2000});
+                                                return false;
+                                            }
+                                            layer.msg('提交成功',{time:2000});
+                                        }
+                                    })
+                                    return false;
+                                });
+                            }
+                        });
+                    }
+
+                    if(roomData.list[0].status=="inUse") {
+                        var inUse=layer.open({
+                            title: "操作",
+                            type: 1,
+                            area: ['620px', '300px'], //宽高
+                            content:
+                            '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">操作</label>\n' +
+                            '                <div class="layui-input-block">\n' +
+                            '      <select id="opr" name="opr" lay-verify="required" lay-filter="inUse">\n' +
+                            '        <option value="-1">请选择操作</option>\n' +
+                            '        <option value="detail">详情</option>\n' +
+                            '        <option value="change">更改</option>\n' +
+                            '        <option value="checkout">退房</option>\n' +
+                            '      </select>'+
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '</form>',
+                            cancel: function(){
+                                layer.close(inUse)
+                            }
+                        });
+                        form.render()
+                        form.on('select(inUse)', function(data) {
+                            if(data.value=="detail"){
+                                layer.close(inUse)
+                                localStorage.setItem('roomNo',no);
+                                Win10.openUrl('./guest_room_info.html','客房'+no+'信息')
+                            }
+                            if(data.value=="checkout"){
+                                layer.close(inUse)
+//                                console.log(roomData.latestRegistrationNo)
+                                $.ajax({
+                                    type:"POST",
+                                    url:"/insertCheckOut.do",
+                                    data:{
+                                        "registrationNo": roomData.latestRegistrationNo,
+                                        "note":""
+                                    },
+                                    success:function (res) {
+                                        if(res=="fail"){
+                                            layer.msg('退房失败');
+                                            return false;
+                                        }
+                                        layer.msg('退房成功');
+                                        reload()
+                                        localStorage.setItem('checkOutRoomNo',no);
+                                        localStorage.setItem('latestRegistrationNo',roomData.latestRegistrationNo);
+                                        Win10.openUrl('./checkout_info.html','客房'+no+'信息')
+                                    }
+                                })
+
+                            }
+                            if(data.value=='change'){
+                                layer.close(inUse)
+                                layer.msg('紧锣密鼓加班加点实现中')
+                            }
+                        })
+                    }
+
+                    if(roomData.list[0].status=="booked"){
+                        var booked=layer.open({
+                            title: "操作",
+                            type: 1,
+                            area: ['620px', '300px'], //宽高
+                            content:
+                            '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                            '            <div class="layui-form-item">\n' +
+                            '                <label class="layui-form-label">操作</label>\n' +
+                            '                <div class="layui-input-block">\n' +
+                            '      <select id="opr" name="opr" lay-verify="required" lay-filter="booked">\n' +
+                            '        <option value="-1">请选择操作</option>\n' +
+                            '        <option value="detail">详情</option>\n' +
+                            '        <option value="0">入住</option>\n' +
+                            '        <option value="3">取消预订</option>\n' +
+                            '      </select>'+
+                            '                </div>\n' +
+                            '            </div>\n' +
+                            '</form>',
+                            cancel: function(){
+                                layer.close(booked)
+                            }
+                        });
+                        form.render()
+                        form.on('select(booked)', function(data) {
+                            if(data.value=="detail"){
+                                layer.close(booked)
+                                localStorage.setItem('roomNo',no);
+                                Win10.openUrl('./guest_room_info.html','客房'+no+'信息')
+                            }
+                            if(data.value=="3"){
+                                layer.close(booked)
+                                $.ajax({
+                                    type:"POST",
+                                    url:"/canceltAdvanceOrder.do",
+                                    data:{
+                                        "roomNo": no
+                                    },
+                                    success:function (res) {
+                                        if(res=="fail"){
+                                            layer.msg('取消失败');
+                                            return false;
+                                        }
+                                        layer.msg('取消成功');
+                                        reload()
+                                    }
+                                })
+                            }
+                            if(data.value=="0") {
+                                layer.close(booked)
+                                layer.msg("紧锣密鼓加班加点实现中")
+                            }
+                        })
+                    }
+                }
+            });
+        })
+
+    }
+</script>
+
+<script id="room" type="text/html">
+    {{#  layui.each(d.list, function(index, item){ }}
+        <div class="layui-col-md2 "        {{#  if(item.status === "inUse"){ }}  name="inUse" {{#  } }}
+                                           {{#  if(item.status === "booked"){ }}  name="booked" {{#  } }}
+                                           {{#  if(item.status === "notInUse"){ }}  name="notInUse" {{#  } }}>
+
+            <div class="btn" onclick="roomRegister({{item.no}})" {{#  if(item.status === "inUse"){ }}  style="background-color: #FF5722;" {{#  } }}
+                                            {{#  if(item.status === "booked"){ }}  style="background-color: #1E9FFF;" {{#  } }} >
+                <div class="no">
+                    <font size="3">客房</font>{{ item.no }}
+                </div>
+            </div>
+            <div id="info">
+                <div class="layui-row">
+
+                    <div class="layui-col-md2">
+                        <div class="layui-row">
+                            <div class="layui-col-md8">
+                                <i class="layui-icon" >&#xe612;</i>
+                            </div>
+                            <div class="layui-col-md2">
+                                <font class="numOfPeople">
+                                    {{ item.numOfPeople }}
+                                </font>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md2 layui-col-md-offset1">
+                        <div class="layui-row">
+                            <div class="layui-col-md8">
+                                <i class="layui-icon" style="color:#FFB800">&#xe65e;</i>
+                            </div>
+                            <div class="layui-col-md2">
+                                <font class="price">
+                                    {{ item.price }}/d
+                                </font>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    {{#  }); }}
+</script>
+<script>
+    layui.use('laytpl', function(){
+        $.ajax({
+            type: "GET",
+            url: "/listGuestRoom.do",
+            data: "",
+            success: function (data) {
+                var getTpl = room.innerHTML
+                    ,view = document.getElementById('view');
+                var laytpl = layui.laytpl;
+                laytpl(getTpl).render(data, function(html){
+                    view.innerHTML = html;
+                });
+            }
+        });
+    });
+
+    function reload() {
+        layui.use('laytpl', function(){
+            $.ajax({
+                type: "GET",
+                url: "/listGuestRoom.do",
+                data: "",
+                success: function (data) {
+                    var getTpl = room.innerHTML
+                        ,view = document.getElementById('view');
+                    var laytpl = layui.laytpl;
+                    laytpl(getTpl).render(data, function(html){
+                        view.innerHTML = html;
+                    });
+                }
+            });
+        });
+    }
+</script>
+</html>

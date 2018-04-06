@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- 实体类,简称 -设置别名 -->
+    <typeAliases>
+        <typeAlias alias="Admin" type="com.hotel.entity.Admin" />
+        <typeAlias alias="Guest" type="com.hotel.entity.Guest" />
+        <typeAlias alias="GuestRoomRank" type="com.hotel.entity.GuestRoomRank" />
+        <typeAlias alias="GuestRoom" type="com.hotel.entity.GuestRoom" />
+        <typeAlias alias="CheckIn" type="com.hotel.entity.CheckIn" />
+        <typeAlias alias="RegistrationCard" type="com.hotel.entity.RegistrationCard" />
+        <typeAlias alias="CheckOut" type="com.hotel.entity.CheckOut" />
+        <typeAlias alias="AdvanceOrder" type="com.hotel.entity.AdvanceOrder" />
+    </typeAliases>
+
+
+    <mappers>
+        <mapper resource="mapper/AdminMapper.xml" />
+        <mapper resource="mapper/GuestMapper.xml" />
+        <mapper resource="mapper/GuestRoomRankMapper.xml"/>
+        <mapper resource="mapper/GuestRoomMapper.xml"/>
+        <mapper resource="mapper/CheckInMapper.xml"/>
+        <mapper resource="mapper/RegistrationCardMapper.xml"/>
+        <mapper resource="mapper/CheckOutMapper.xml"/>
+        <mapper resource="mapper/AdvanceOrderMapper.xml"/>
+    </mappers>
+
+</configuration>

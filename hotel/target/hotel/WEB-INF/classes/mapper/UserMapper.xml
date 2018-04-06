@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.hotel.mapper.UserMapper">
+    <select id="listAllUser" resultType="User">
+        select * from t_userinfo
+    </select>
+
+    <select id="listPagedUser"   resultType="User">
+        select top ${pageSize} * from t_userinfo where id not in (select top (${pageSize} * (${pageIndex} -1)) id from t_userinfo)
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from t_userinfo
+    </select>
+
+    <insert id="insertUser" parameterType="User">
+        insert into t_userinfo VALUES (#{name},#{address})
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        UPDATE  t_userinfo set name=#{name},address=#{address} where id=#{id}
+    </update>
+
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM t_userinfo where id=#{id}
+    </delete>
+
+    <select id="getUserById" resultType="User" parameterType="int">
+        select * from t_userinfo where id=#{id}
+    </select>
+
+</mapper>

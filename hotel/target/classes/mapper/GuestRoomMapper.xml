@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.hotel.mapper.GuestRoomMapper">
+    <select id="listAllGuestRoom" resultType="GuestRoom">
+        SELECT GuestRoom.no, GuestRoom.status, GuestRoom.location, GuestRoom.floor, GuestRoom.area,
+        GuestRoom.rank ,GuestRoomRank.numOfPeople, GuestRoomRank.price, GuestRoomRank.facility FROM GuestRoom,GuestRoomRank where  GuestRoom.rank=GuestRoomRank.rank
+    </select>
+
+    <select id="listPagedGuestRoom"   resultType="GuestRoom">
+        select top ${pageSize} * from GuestRoom where ID not in (select top (${pageSize} * (${pageIndex} -1)) ID from Guest)
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from GuestRoom
+    </select>
+
+    <insert id="insertGuestRoom" parameterType="GuestRoom">
+        insert into GuestRoom VALUES (#{no},#{status},#{location},#{floor},#{area},#{rank})
+    </insert>
+
+    <update id="updateGuestRoom" parameterType="GuestRoom">
+        UPDATE  GuestRoom set status=#{status}, location=#{location}, floor=#{floor}, area=#{area}, rank=#{rank} where no=#{no}
+    </update>
+
+    <delete id="deleteGuestRoom" parameterType="GuestRoom">
+        DELETE FROM GuestRoom where no=#{no}
+    </delete>
+
+    <select id="getGuestRoomByNo" resultType="GuestRoom" parameterType="GuestRoom">
+        SELECT GuestRoom.no, GuestRoom.status, GuestRoom.location, GuestRoom.floor, GuestRoom.area,
+        GuestRoom.rank ,GuestRoomRank.numOfPeople, GuestRoomRank.price, GuestRoomRank.facility FROM GuestRoom,GuestRoomRank where  GuestRoom.rank=GuestRoomRank.rank and GuestRoom.no=#{no}
+    </select>
+
+    <select id="queryGuestRoom" resultType="GuestRoom" parameterType="String">
+        select * from GuestRoom where
+        no like #{keyword} or status like #{keyword}
+        or location like #{keyword} or floor like #{keyword}
+        or area like #{keyword} or rank like #{keyword}
+    </select>
+
+</mapper>

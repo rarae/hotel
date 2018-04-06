@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间和接口保持一致-->
+<mapper namespace="com.hotel.mapper.CheckInMapper">
+    <select id="listAllCheckIn" resultType="CheckIn">
+        select * from Guest
+    </select>
+
+    <select id="getNo" resultType="String">
+        select TOP 1 CheckIn.no from CheckIn order by no desc
+    </select>
+
+    <select id="getLatestNoByRoomNo" resultType="String" parameterType="String">
+        select TOP 1 CheckIn.no from CheckIn where roomNo=#{roomNo} order by no desc
+    </select>
+
+
+    <insert id="insertCheckIn" parameterType="CheckIn">
+        insert into CheckIn VALUES (#{no},#{guestID},#{checkInTime},#{checkOutTime},#{duration},#{roomNo},#{deposit},#{adminID},#{confirmTime},#{note})
+    </insert>
+
+    <select id="getCheckInByRoomNo" resultType="CheckIn" parameterType="CheckIn">
+        select top 1 * from CheckIn where roomNo=#{roomNo} order by no desc
+    </select>
+
+    <select id="getCheckInByNo" resultType="CheckIn" parameterType="String">
+        select * from CheckIn where no=#{no}
+    </select>
+
+
+</mapper>

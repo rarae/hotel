@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <meta charset="UTF-8">
+    <title>子页测试</title>
+    <script src="./js/jquery-2.2.4.min.js"></script>
+    <script src="./js/win10.child.js"></script>
+    <script src="./layui/layui.js"></script>
+    <style>
+        .highlight {
+            color:red;
+        }
+        .btn{
+            margin: 20px;
+            width: 160px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            color: white;
+            background-color: #2D93CA;
+            border-radius: 3px;
+            transition: all 0.5s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn:hover{
+            background-color: #256d95;
+        }
+        .room ,.roomGuest,.CheckIn, .AdvanceOrder{
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+    </style>
+    <script>
+        function f1() {
+            Win10_child.newMsg('子页的问候','这是从iframe页调用APi发送的消息哦');
+        }
+        function f2() {
+            Win10_child.openUrl('http://win10ui.yuri2.cn','<img class=\'icon\' src=\'./img/icon/win10.png\'/>Win10-UI官网')
+        }
+        function f3() {
+            Win10_child.close();
+        }
+    </script>
+</head>
+<body>
+
+    <div class="room">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>客房信息</legend>
+        </fieldset>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">客房号</label>
+                <div class="layui-input-block">
+                    <input name="no" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <input name="status" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">位置</label>
+                <div class="layui-input-block">
+                    <input name="location" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">楼层</label>
+                <div class="layui-input-block">
+                    <input name="floor" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">面积</label>
+                <div class="layui-input-block">
+                    <input name="area" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">等级</label>
+                <div class="layui-input-block">
+                    <input name="rank" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">可住人数</label>
+                <div class="layui-input-block">
+                    <input name="numOfPeople" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格/天</label>
+                <div class="layui-input-block">
+                    <input name="price" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">设施</label>
+                <div class="layui-input-block">
+                    <input name="facility" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="roomGuest">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>入住客户信息</legend>
+        </fieldset>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item" name="guest1">
+                <label class="layui-form-label">客房1ID</label>
+                <div class="layui-input-block">
+                    <input name="guestID1" id="guestID1" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item" name="guest1">
+                <label class="layui-form-label">客房1姓名</label>
+                <div class="layui-input-block">
+                    <input name="guestName1" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest2">
+                <label class="layui-form-label">客房2ID</label>
+                <div class="layui-input-block">
+                    <input name="guestID2" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest2">
+                <label class="layui-form-label">客房2姓名</label>
+                <div class="layui-input-block">
+                    <input name="guestName2" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest3">
+                <label class="layui-form-label">客房3ID</label>
+                <div class="layui-input-block">
+                    <input name="guestID3" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest3">
+                <label class="layui-form-label">客房3姓名</label>
+                <div class="layui-input-block">
+                    <input name="guestName3" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest4">
+                <label class="layui-form-label">客房4ID</label>
+                <div class="layui-input-block">
+                    <input name="guestID4" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest4">
+                <label class="layui-form-label">客房4姓名</label>
+                <div class="layui-input-block">
+                    <input name="guestName4" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest5">
+                <label class="layui-form-label">客房5ID</label>
+                <div class="layui-input-block">
+                    <input name="guestID5" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item"name="guest5">
+                <label class="layui-form-label">客房5姓名</label>
+                <div class="layui-input-block">
+                    <input name="guestName5" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="CheckIn">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>入住信息</legend>
+        </fieldset>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">入住编号</label>
+                <div class="layui-input-block">
+                    <input name="CheckInno" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主证件号</label>
+                <div class="layui-input-block">
+                    <input name="guestID" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">入住时间</label>
+                <div class="layui-input-block">
+                    <input name="checkInTime" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">退房时间</label>
+                <div class="layui-input-block">
+                    <input name="checkOutTime" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">入住时长</label>
+                <div class="layui-input-block">
+                    <input name="duration" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">押金</label>
+                <div class="layui-input-block">
+                    <input name="deposit" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">经手管理员</label>
+                <div class="layui-input-block">
+                    <input name="adminID" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认时间</label>
+                <div class="layui-input-block">
+                    <input name="confirmTime" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input name="note" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="AdvanceOrder">
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>预订信息</legend>
+        </fieldset>
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">预订编号</label>
+                <div class="layui-input-block">
+                    <input name="noBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主证件号</label>
+                <div class="layui-input-block">
+                    <input name="guestIDBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">入住时间</label>
+                <div class="layui-input-block">
+                    <input name="checkInTimeBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">退房时间</label>
+                <div class="layui-input-block">
+                    <input name="checkOutTimeBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">入住时长</label>
+                <div class="layui-input-block">
+                    <input name="durationBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">押金</label>
+                <div class="layui-input-block">
+                    <input name="depositBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">经手管理员</label>
+                <div class="layui-input-block">
+                    <input name="adminIDBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认时间</label>
+                <div class="layui-input-block">
+                    <input name="confirmTimeBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input name="noteBook" autocomplete="off" placeholder="空" class="layui-input" type="text" disabled="true">
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        $.ajax({
+            url: "/listLatestCheckIn.do",
+            data: {
+                "roomNo":localStorage.getItem('roomNo')
+            },
+            type: "GET",
+            success: function (Data) {
+
+                if(Data.GuestRoom[0].status=='booked') {
+                    $(".CheckIn").hide()
+                    $(".roomGuest").hide()
+                }
+
+                if(Data.GuestRoom[0].status=='notInUse') {
+                    $(".CheckIn").hide()
+                    $(".roomGuest").hide()
+                    $(".AdvanceOrder").hide()
+                }
+
+
+
+                if(Data.CheckIn==null){
+                    $(".CheckIn").hide()
+                }
+                else{
+                    $("[name='CheckInno']").val(Data.CheckIn[0].no);
+                    $("[name='guestID']").val(Data.CheckIn[0].guestID);
+                    $("[name='checkInTime']").val(Data.CheckIn[0].checkInTime);
+                    $("[name='checkOutTime']").val(Data.CheckIn[0].checkOutTime);
+                    $("[name='duration']").val(Data.CheckIn[0].duration/(3600*24)+'天');
+                    $("[name='roomNo']").val(Data.CheckIn[0].roomNo);
+                    $("[name='deposit']").val(Data.CheckIn[0].deposit+'（房款的120%）');
+                    $("[name='adminID']").val(Data.CheckIn[0].adminID);
+                    $("[name='confirmTime']").val(Data.CheckIn[0].confirmTime);
+                    $("[name='note']").val(Data.CheckIn[0].note);
+                }
+
+                if(Data.Guest==null){
+                    $(".roomGuest").hide()
+                }
+                else{
+                    //show
+                    for(var i=0; i<Data.Guest.length ; i++){
+                        var attrID = '[name=guestID'
+                        var attrName = '[name=guestName'
+
+                        attrID = attrID + (i+1).toString()+"]"
+                        attrName = attrName + (i+1).toString()+"]"
+
+                        $(attrID).val(Data.Guest[i].ID);
+                        $(attrName).val(Data.Guest[i].name);
+                    }
+
+                    //hide
+                    for(var i=Data.Guest.length+1; i<=5 ; i++){
+                        var attrID = '[name=guest'
+
+                        attrID = attrID + (i).toString()+"]"
+
+                        $(attrID).hide()
+                    }
+                }
+
+                if(Data.AdvanceOrder==null){
+                    $(".AdvanceOrder").hide()
+                }
+                else{
+                    $("[name='noBook']").val(Data.AdvanceOrder[0].no);
+                    $("[name='guestIDBook']").val(Data.AdvanceOrder[0].guestID);
+                    $("[name='checkInTimeBook']").val(Data.AdvanceOrder[0].checkInTime);
+                    $("[name='checkOutTimeBook']").val(Data.AdvanceOrder[0].checkOutTime);
+                    $("[name='durationBook']").val(Data.AdvanceOrder[0].duration/(3600*24)+'天');
+                    $("[name='roomNoBook']").val(Data.AdvanceOrder[0].roomNo);
+                    $("[name='depositBook']").val(Data.AdvanceOrder[0].deposit+'（房款的120%）');
+                    $("[name='adminIDBook']").val(Data.AdvanceOrder[0].adminID);
+                    $("[name='confirmTimeBook']").val(Data.AdvanceOrder[0].confirmTime);
+                    $("[name='noteBook']").val(Data.AdvanceOrder[0].note);
+                }
+
+                $("[name='no']").val(Data.GuestRoom[0].no);
+                $("[name='status']").val(Data.GuestRoom[0].status);
+                $("[name='location']").val(Data.GuestRoom[0].location);
+                $("[name='floor']").val(Data.GuestRoom[0].floor);
+                $("[name='area']").val(Data.GuestRoom[0].area);
+                $("[name='rank']").val(Data.GuestRoom[0].rank);
+                $("[name='numOfPeople']").val(Data.GuestRoom[0].numOfPeople);
+                $("[name='price']").val(Data.GuestRoom[0].price);
+                $("[name='facility']").val(Data.GuestRoom[0].facility);
+            },
+            beforeSend: function () {
+            }
+        })
+
+    });
+</script>

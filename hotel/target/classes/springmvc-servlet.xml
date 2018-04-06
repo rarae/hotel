@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
+
+    <!--从配置文件加载数据库信息-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:config/jdbc.properties"/>
+        <property name="fileEncoding" value="UTF-8"/>
+    </bean>
+
+    <!--配置数据源，这里使用Spring默认-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${sqlserver.driver}" />
+        <property name="url" value="${sqlserver.url}"/>
+        <property name="username" value="${sqlserver.username}"/>
+        <property name="password" value="${sqlserver.password}"/>
+    </bean>
+
+    <!--扫描Mapper-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hotel.mapper"/>
+    </bean>
+
+    <!--配置sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:springmvc-mybatis.xml"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--启用最新的注解器、映射器-->
+    <mvc:annotation-driven/>
+
+    <!--扫描Controller注解类-->
+    <context:component-scan base-package="com.hotel.controller" />
+    <!--扫描Service注解类-->
+    <context:component-scan base-package="com.hotel.service"/>
+    <context:component-scan base-package="com.hotel.serviceImpl"/>
+
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>

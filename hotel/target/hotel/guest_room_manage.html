@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="./layui/css/layui.css">
+    <meta charset="UTF-8">
+    <title>子页测试</title>
+    <script src="./js/jquery-2.2.4.min.js"></script>
+    <script src="./js/win10.child.js"></script>
+    <script src="./layui/layui.js"></script>
+    <style>
+        .highlight {
+            color:red;
+        }
+        .btn{
+            margin: 20px;
+            width: 160px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            color: white;
+            background-color: #2D93CA;
+            border-radius: 3px;
+            transition: all 0.5s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn:hover{
+            background-color: #256d95;
+        }
+        #guest_info_input{
+            margin-top: 50px;
+            margin-right: 50px;
+        }
+    </style>
+    <script>
+        function f1() {
+            Win10_child.newMsg('子页的问候','这是从iframe页调用APi发送的消息哦');
+        }
+        function f2() {
+            Win10_child.openUrl('http://win10ui.yuri2.cn','<img class=\'icon\' src=\'./img/icon/win10.png\'/>Win10-UI官网')
+        }
+        function f3() {
+            Win10_child.close();
+        }
+    </script>
+</head>
+<body>
+
+<div id="guest_room_rank_manage" style="margin-top: 35px;margin-left: 3%;margin-right: 3%">
+    <div class="layui-row">
+        <div class="layui-col-md9">
+            <button id="insertGuestRoom" class="layui-btn" ><i class="layui-icon">&#xe608;</i>新增客房</button>
+        </div>
+        <div class="layui-col-md3">
+
+        </div>
+    </div>
+
+
+    <table id="guest_room_rank_info" class="layui-table" lay-even lay-skin="nob" lay-filter="test" >
+    </table>
+</div>
+
+
+<script>
+    layui.use(['layer', 'table','form'], function() {
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+
+        table.render({
+            skin: "row"
+            ,elem: '#guest_room_rank_info'
+            ,url: "/listGuestRoom_manage.do"
+            ,cols: [[
+                {field:'no', title: '客房号',  sort: true, width:"100"}
+                ,{field:'status', title: '状态', width:"88"}
+                ,{field:'location', title: '位置', width:"88"}
+                ,{field:'floor', title: '楼层', width:"88"}
+                ,{field:'area', title: '面积', width:"84" }
+                ,{field:'rank', title: '客房等级', width:"100"}
+                ,{field:'numOfPeople', title: '可住人数', width:"100"}
+                ,{field:'price', title: '价格/天', width:"120"}
+                ,{field:'facility', title: '设施', width:"350"}
+                ,{field:'opr', title: '操作',toolbar:"#barDemo",width:"250"}
+            ]]
+            ,id: 'testReload'
+            ,page: true
+            ,height: "auto"
+        });
+
+        table.on('tool(test)', function(obj){
+            var rowdata = obj.data;
+            if(obj.event === 'edit') {
+                var edit=layer.open({
+                    title: "编辑",
+                    type: 1,
+//                    skin: 'layui-layer-rim', //加上边框
+                    area: ['620px', '540px'], //宽高
+                    content:
+                    '<form class="layui-form" action="" style="margin-right: 80px;margin-top:20px">\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">客房编号</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                <input  name="no" required lay-verify="required" placeholder="请输入可住人数" autocomplete="off" class="layui-input" disabled="true" style="cursor: not-allowed">\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">状态</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <select name="status" lay-verify="required">\n' +
+                    '                        <option selected value="">请选择客房状态</option>\n' +
+                    '                        <option value="notInUse">正常</option>\n' +
+                    '                        <option value="inUse">使用中</option>\n' +
+                    '                        <option value="booked">预订</option>\n' +
+                    '                    </select>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">位置</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <input  name="location" required lay-verify="required" placeholder="请输入价格" autocomplete="off" class="layui-input">\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">楼层</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <input  name="floor" required lay-verify="required|number" placeholder="请输入设施" autocomplete="off" class="layui-input">\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">面积</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <input  name="area" required lay-verify="required|number" placeholder="请输入设施" autocomplete="off" class="layui-input">\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <label class="layui-form-label">等级</label>\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <select name="rank" lay-verify="required">\n' +
+                    '                        <option selected value="">请选择客房等级</option>\n' +
+                    '                        <option value="A">A</option>\n' +
+                    '                        <option value="B">B</option>\n' +
+                    '                        <option value="C">C</option>\n' +
+                    '                        <option value="D">D</option>\n' +
+                    '                        <option value="E">E</option>\n' +
+                    '                        <option value="F">F</option>\n' +
+                    '                        <option value="G">G</option>\n' +
+                    '                        <option value="H">H</option>\n' +
+                    '                        <option value="I">I</option>\n' +
+                    '                        <option value="J">J</option>\n' +
+                    '                    </select>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '\n' +
+                    '            <div class="layui-form-item">\n' +
+                    '                <div class="layui-input-block">\n' +
+                    '                    <button class="layui-btn" lay-submit lay-filter="updateGuestRoom">立即提交</button>\n' +
+                    '                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>\n' +
+                    '                </div>\n' +
+                    '            </div>\n' +
+                    '        </form>',
+                    cancel: function(){
+                        layer.close(edit)
+                    }
+                });
+
+                $("[name='no']").val(rowdata.no.trim().replace(/\<.*?\>/g,''));
+                $("[name='location']").val(rowdata.location.trim().replace(/\<.*?\>/g,''));
+                $("[name='floor']").val(rowdata.floor.trim().replace(/\<.*?\>/g,''));
+                $("[name='area']").val(rowdata.area.trim().replace(/\<.*?\>/g,''));
+
+                form.render()
+
+                //监听提交
+                form.on('submit(updateGuestRoom)', function(data){
+
+                    console.log(data.field)
+                    var load
+                    $.ajax({
+                        url: "/updateGuestRoom.do",
+                        data: data.field,
+                        type: "POST",
+                        dataType: "text",
+                        beforeSend: function () {
+                            load = layer.load(1);
+                        },
+                        success: function (result) {
+                            layer.close(load)
+                            if(result=="no such guest"){
+                                layer.msg('没有这个客房，请重试',{time:2000});
+                                return false;
+                            }
+                            if(result=="fail"){
+                                layer.msg('修改失败，请重试',{time:2000});
+                                return false;
+                            }
+                            layer.msg('客房属性修改成功',{time:2000});
+                            table.reload('testReload', {
+                                where: {}
+                                , page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+
+                        }
+                    })
+                    return false;
+                });
+            }
+            else if(obj.event==="del"){
+                layer.confirm('删除客房?', function(index){
+                    //do something
+
+                    var load
+                    $.ajax({
+                        url: "/deleteGuestRoom.do",
+                        data: {
+                            "no":rowdata.no.trim(),
+                        },
+                        type: "POST",
+                        dataType: "text",
+                        beforeSend: function () {
+                            load = layer.load(1);
+                        },
+                        success: function (result) {
+                            layer.close(load)
+                            if(result=="no such guest"){
+                                layer.msg('没有这个客房等级，请重试',{time:2000});
+                                return false;
+                            }
+                            if(result=="fail"){
+                                layer.msg('删除失败，请重试',{time:2000});
+                                return false;
+                            }
+                            layer.msg('客房等级属性删除成功',{time:2000});
+                            table.reload('testReload', {
+                                where: {}
+                                , page: {
+                                    curr: 1 //重新从第 1 页开始
+                                }
+                            });
+
+                        }
+                    })
+                    return false;
+                    layer.close(index);
+                });
+            }
+        })
+
+        form.on('submit(query)', function(data){
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+
+            layer.msg('查询成功',{time:2000});
+
+            var keyword=$("[name='keyword']").val();
+
+            table.reload('testReload', {
+                url:"/queryGuestRoomRank.do"
+                ,where: {
+                    keyword:keyword
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+        $("#insertGuestRoom").click(function () {
+            var insert=layer.open({
+                title: "新增客房",
+                type: 1,
+//                    skin: 'layui-layer-rim', //加上边框
+                area: ['620px', '600px'], //宽高
+                content:
+                '<form class="layui-form" action="" style="margin-right: 80px;margin-top:40px">\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <label class="layui-form-label">客房编号</label>\n' +
+                '                <div class="layui-input-block">\n' +
+                '                <input  name="no" required lay-verify="required" placeholder="请输入客房编号" autocomplete="off" class="layui-input" >\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <label class="layui-form-label">位置</label>\n' +
+                '                <div class="layui-input-block">\n' +
+                '                    <input  name="location" required lay-verify="required" placeholder="请输入位置" autocomplete="off" class="layui-input">\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <label class="layui-form-label">楼层</label>\n' +
+                '                <div class="layui-input-block">\n' +
+                '                    <input  name="floor" required lay-verify="required|number" placeholder="请输入楼层" autocomplete="off" class="layui-input">\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '\n' +
+                '\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <label class="layui-form-label">面积</label>\n' +
+                '                <div class="layui-input-block">\n' +
+                '                    <input  name="area" required lay-verify="required|number" placeholder="请输入面积" autocomplete="off" class="layui-input">\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '\n' +
+                '\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <label class="layui-form-label">等级</label>\n' +
+                '                <div class="layui-input-block">\n' +
+                '                    <select name="rank" lay-verify="required">\n' +
+                '                        <option selected value="">请选择客房等级</option>\n' +
+                '                        <option value="A">A</option>\n' +
+                '                        <option value="B">B</option>\n' +
+                '                        <option value="C">C</option>\n' +
+                '                        <option value="D">D</option>\n' +
+                '                        <option value="E">E</option>\n' +
+                '                        <option value="F">F</option>\n' +
+                '                        <option value="G">G</option>\n' +
+                '                        <option value="H">H</option>\n' +
+                '                        <option value="I">I</option>\n' +
+                '                        <option value="J">J</option>\n' +
+                '                    </select>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '\n' +
+                '            <div class="layui-form-item">\n' +
+                '                <div class="layui-input-block">\n' +
+                '                    <button class="layui-btn" lay-submit lay-filter="insertGuestRoom">立即提交</button>\n' +
+                '                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </form>'
+                ,cancel: function(){
+                    layer.close(insert)
+                }
+            });
+            form.render()
+            //监听提交
+            form.on('submit(insertGuestRoom)', function(data){
+
+                var load
+                $.ajax({
+                    url: "/insertGuestRoom.do",
+                    data: data.field,
+                    type: "POST",
+                    dataType: "text",
+                    beforeSend: function () {
+                        load = layer.load(1);
+                    },
+                    success: function (result) {
+                        layer.close(load)
+                        if(result=="insertDuplicate"){
+                            layer.msg('重复插入，请重试',{time:2000});
+                            return false;
+                        }
+                        layer.msg('插入成功',{time:2000});
+                        table.reload('testReload', {
+                            where: {}
+                            , page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        });
+                    }
+                })
+
+                return false;
+            });
+        })
+
+    })
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon" style="font-size: 30px; color: #fff;">&#xe642;</i>编辑</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="del"><i class="layui-icon" style="font-size: 30px; color: #fff;">&#xe640;</i>删除</a>
+</script>
+</body>
+</html>
